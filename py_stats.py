@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import sys
 import pyspeedtest
+import json
 from statistics import mean
 
+
+#-------------------------------------------------------------------------------------
 #class for measuring internet dowload,upload and ping
 class SP_Test: 
 
@@ -17,7 +20,7 @@ class SP_Test:
         self.test_list.append(self.st.upload())
         self.test_list.append(self.st.ping())    
     
-
+#--------------------------------------------------------------------------------------
 #class for making stats from multiple tests
 class Count_test(SP_Test):
 
@@ -40,6 +43,14 @@ class Count_test(SP_Test):
     def print_results(self):
         print(*self.result_list)
 
+    def store_results(self):
+        try:
+            f = open('stats','w')
+        except OSError:
+            exit(1)
+
+
+#---------------------------------------------------------------------------------------
 #creating object of Count_test class and running speed tests
 try:
     X = Count_test()
