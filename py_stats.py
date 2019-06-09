@@ -2,13 +2,13 @@
 import sys
 import pyspeedtest
 import json
+from datetime import datetime
 from statistics import mean
-
 
 #-------------------------------------------------------------------------------------
 #class for measuring internet dowload,upload and ping
 class SP_Test: 
-
+    
     #initialization of list and speedtest class
     def __init__(self):
         self.test_list = []
@@ -46,6 +46,9 @@ class Count_test(SP_Test):
     def store_results(self):
         try:
             f = open('stats','w')
+            time_now = (str(datetime.now())).split(' ')[0]
+            json.dump({'date':time_now,'download':self.result_list[0],'upload':self.result_list[1],'ping':self.result_list[2]},f)
+            f.close()
         except OSError:
             exit(1)
 
@@ -55,7 +58,8 @@ class Count_test(SP_Test):
 try:
     X = Count_test()
     X.speed_avg()
-    X.print_results()   
+    #X.print_results()   
+    X.store_results()
 
 #in case of Keyboard interrupt exit program immediately
 except KeyboardInterrupt:
