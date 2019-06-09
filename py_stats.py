@@ -45,7 +45,8 @@ class Count_test(SP_Test):
 
     def store_results(self):
         try:
-            f = open('stats','w')
+            self.speed_avg()
+            f = open('stats','a+')
             time_now = (str(datetime.now())).split(' ')[0]
             json.dump({'date':time_now,'download':self.result_list[0],'upload':self.result_list[1],'ping':self.result_list[2]},f)
             f.close()
@@ -57,7 +58,6 @@ class Count_test(SP_Test):
 #creating object of Count_test class and running speed tests
 try:
     X = Count_test()
-    X.speed_avg()
     #X.print_results()   
     X.store_results()
 
