@@ -2,6 +2,7 @@
 import sys
 import pyspeedtest
 import json
+import notify2
 from datetime import datetime
 from statistics import mean
 
@@ -33,11 +34,16 @@ class Count_test(SP_Test):
 
     #counting the average down,up and ping from 3 tests
     def speed_avg(self):
-        self.t1.get_stats()
-        self.t2.get_stats()
-        self.t3.get_stats()
-        self.result_list = [mean(k) for k in zip(self.t1.test_list,self.t2.test_list,self.t3.test_list)]
-    
+        try:
+            self.t1.get_stats()
+            self.t2.get_stats()
+            self.t3.get_stats()
+            self.result_list = [mean(k) for k in zip(self.t1.test_list,self.t2.test_list,self.t3.test_list)]
+        #TODO make exception handler
+        except:
+            exit(1)
+
+
     #printing result of average speeds
     #strictly debugging function
     def print_results(self):
@@ -45,20 +51,25 @@ class Count_test(SP_Test):
 
     def store_results(self):
         try:
+            self.net_notif("Started")
             self.speed_avg()
             f = open('stats','a+')
             time_now = (str(datetime.now())).split(' ')[0]
             json.dump({'date':time_now,'download':self.result_list[0],'upload':self.result_list[1],'ping':self.result_list[2]},f)
             f.close()
+            self.net_notif("Finished")
         except OSError:
             exit(1)
 
+    def net_notif(self,message):
+        notify2.init("Net Stats")
+        n = notify2.Notification("Net Stats","%s test"%(message))
+        n.show()
 
 #---------------------------------------------------------------------------------------
 #creating object of Count_test class and running speed tests
 try:
     X = Count_test()
-    #X.print_results()   
     X.store_results()
 
 #in case of Keyboard interrupt exit program immediately
