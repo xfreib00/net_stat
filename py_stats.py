@@ -6,6 +6,21 @@ import notify2
 from datetime import datetime
 from statistics import mean
 
+#------------------------------------------------------------------------------------
+#Classes for exceptions
+
+class get_stats_except(Exception):
+    pass
+
+class speed_avg_except(Exception):
+    pass
+
+class store_results_except(Exception):
+    pass
+
+class net_notif_except(Exception):
+    pass
+
 #-------------------------------------------------------------------------------------
 #class for measuring internet dowload,upload and ping
 class SP_Test: 
@@ -17,10 +32,13 @@ class SP_Test:
 
     #measuring internet speeds and appeding results to the list
     def get_stats(self):
-        self.test_list.append(self.st.download())
-        self.test_list.append(self.st.upload())
-        self.test_list.append(self.st.ping())    
-    
+        try:
+            self.test_list.append(self.st.download())
+            self.test_list.append(self.st.upload())
+            self.test_list.append(self.st.ping())    
+        except:
+            raise get_stats_except()
+
 #--------------------------------------------------------------------------------------
 #class for making stats from multiple tests
 class Count_test(SP_Test):
@@ -39,9 +57,8 @@ class Count_test(SP_Test):
             self.t2.get_stats()
             self.t3.get_stats()
             self.result_list = [mean(k) for k in zip(self.t1.test_list,self.t2.test_list,self.t3.test_list)]
-        #TODO make exception handler
         except:
-            exit(1)
+            raise speed_avg_except()
 
 
     #printing result of average speeds
@@ -58,15 +75,23 @@ class Count_test(SP_Test):
             json.dump({'date':time_now,'download':self.result_list[0],'upload':self.result_list[1],'ping':self.result_list[2]},f)
             f.close()
             self.net_notif("Finished")
-        except OSError:
-            exit(1)
+        except:
+            raise store_results_except()
 
     def net_notif(self,message):
-        notify2.init("Net Stats")
-        n = notify2.Notification("Net Stats","%s test"%(message))
-        n.show()
-
+        try:
+            notify2.init("Net Stats")
+            n = notify2.Notification("Net Stats","%s test"%(message))
+            n.show()
+        except:
+            raise net_notif_except()
+            
 #---------------------------------------------------------------------------------------
+
+#TODO create class for reading file filled with json
+
+#TODO create class for making statistics
+
 #creating object of Count_test class and running speed tests
 try:
     X = Count_test()
@@ -75,8 +100,16 @@ try:
 #in case of Keyboard interrupt exit program immediately
 except KeyboardInterrupt:
     exit(0)
-
-
+except net_notif_except:
+    exit(10)
+except store_results_except:
+    exit(11)
+except speed_avg_except:
+    exit(12)
+except get_stats_except:
+    exit(13)
+except SystemExit as ex:
+    exit(ex.code)
 
 
 
