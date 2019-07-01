@@ -70,7 +70,7 @@ class Count_test(SP_Test):
         try:
             self.net_notif("Started")
             self.speed_avg()
-            f = open('stats','a+')
+            f = open('stats.json','a+')
             time_now = (str(datetime.now())).split(' ')[0]
             json.dump({'date':time_now,'download':self.result_list[0],'upload':self.result_list[1],'ping':self.result_list[2]},f)
             f.close()
@@ -89,6 +89,16 @@ class Count_test(SP_Test):
 #---------------------------------------------------------------------------------------
 
 #TODO create class for reading file filled with json
+
+class Read_stats:
+    def __init__():
+        with open('stats.json','r') as js_file:
+            self.data = js_file.read()
+
+    def read_file():
+        self.js_obj = json.loads(self.data)
+        
+
 
 #TODO create class for making statistics
 
