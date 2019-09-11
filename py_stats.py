@@ -119,8 +119,10 @@ except speed_avg_except:
 except get_stats_except:
     exit(13)
 except SystemExit as ex:
+    print("Unexpected runtime error")
     exit(ex.code)
-
+finally:
+    print("\nProgram stopped")
 
 
 
