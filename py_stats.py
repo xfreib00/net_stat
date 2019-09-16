@@ -91,12 +91,13 @@ class Count_test(SP_Test):
 #TODO create class for reading file filled with json
 
 class Read_stats:
-    def __init__():
+    def __init__(self):
         with open('stats.json','r') as js_file:
             self.data = js_file.read()
 
-    def read_file():
+    def read_file(self):
         self.js_obj = json.loads(self.data)
+        print(json.dumps(self.js_obj, indent=4, sort_keys=True))        
         
 
 
@@ -106,6 +107,8 @@ class Read_stats:
 try:
     X = Count_test()
     X.store_results()
+    J = Read_stats()
+    J.read_file()
 
 #in case of Keyboard interrupt exit program immediately
 except KeyboardInterrupt:
