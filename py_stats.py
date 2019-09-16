@@ -97,16 +97,15 @@ class Read_stats:
 
     def read_file(self):
         self.js_obj = json.loads(self.data)
-        print(json.dumps(self.js_obj, indent=4, sort_keys=True))        
-        
+
 
 
 #TODO create class for making statistics
 
 #creating object of Count_test class and running speed tests
 try:
-    X = Count_test()
-    X.store_results()
+    #X = Count_test()
+    #X.store_results()
     J = Read_stats()
     J.read_file()
 
