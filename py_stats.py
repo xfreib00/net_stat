@@ -102,12 +102,18 @@ class Read_stats:
 
 #TODO create class for making statistics
 
+class Create_statistics(Read_stats):
+    def __init__(self):
+        self.stats = Read_stats()
+        self.stats.read_file()
+
+
+
 #creating object of Count_test class and running speed tests
 try:
     #X = Count_test()
     #X.store_results()
-    J = Read_stats()
-    J.read_file()
+    J = Create_statistics()
 
 #in case of Keyboard interrupt exit program immediately
 except KeyboardInterrupt:
